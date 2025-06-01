@@ -1,1 +1,3 @@
-<template>Test</template>
+<template>
+  <AppAlert>value in slot</AppAlert>
+</template>
