@@ -1,3 +1,3 @@
 <template>
-  <AppAlert>value in slot</AppAlert>
+  <p>index page</p>
 </template>
