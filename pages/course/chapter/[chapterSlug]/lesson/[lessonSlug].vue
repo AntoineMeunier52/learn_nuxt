@@ -20,12 +20,18 @@
         Download Video
       </a>
     </div>
-    <p class="mb-2">{{ lesson?.text }}</p>
     <VideoPlayer v-if="lesson?.videoId" :video-id="lesson?.videoId" />
+    <p class="my-4">{{ lesson?.text }}</p>
+    <LessonComplete
+      :model-value="isLessonComplete"
+      @update:model-value="toggleComplete"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
+import LessonComplete from "~/components/LessonComplete.vue";
+
 const course = useCourse();
 const route = useRoute();
 
@@ -47,6 +53,36 @@ const title = computed(() => {
 useHead({
   title: title,
 });
+
+const progress = useState<boolean[][]>("progress", () => {
+  return [];
+});
+
+const isLessonComplete = computed(() => {
+  if (!chapter.value || !lesson.value) {
+    return false;
+  }
+  if (!progress.value[chapter.value.number - 1]) {
+    return false;
+  }
+  if (!progress.value[chapter.value.number - 1][lesson.value.number - 1]) {
+    return false;
+  }
+
+  return progress.value[chapter.value.number - 1][lesson.value.number - 1];
+});
+
+const toggleComplete = () => {
+  if (!chapter.value || !lesson.value) {
+    return false;
+  }
+  if (!progress.value[chapter.value.number - 1]) {
+    progress.value[chapter.value.number - 1] = [];
+  }
+
+  progress.value[chapter.value.number - 1][lesson.value.number - 1] =
+    !isLessonComplete.value;
+};
 </script>
 
 <style></style>
